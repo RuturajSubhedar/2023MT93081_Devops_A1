@@ -4,7 +4,13 @@ pipeline {
     stages {
         stage('Declarative: Checkout SCM') {
             steps {
-                checkout scm
+                checkout([$class: 'GitSCM', 
+                    branches: [[name: 'master']], 
+                    doGenerateSubmoduleConfigurations: false, 
+                    extensions: [], 
+                    submoduleCfg: [], 
+                    userRemoteConfigs: [[url: 'https://github.com/RuturajSubhedar/2023MT93081_Devops_A1.git']]
+                ])
             }
         }
         
