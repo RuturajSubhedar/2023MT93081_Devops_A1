@@ -13,7 +13,7 @@ pipeline {
         stage('Build and Compile') {
             steps {
                 // Compile Java code using javac
-                sh 'javac -d target src/**/*.java'
+                bat 'javac -d target src/**/*.java'
             }
             
             post {
