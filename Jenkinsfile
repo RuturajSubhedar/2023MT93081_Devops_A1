@@ -13,7 +13,7 @@ pipeline {
         stage('Build and Compile') {
             steps {
                 // List all .java files in the src directory
-                bat 'dir /s /b src\*.java > sources.txt'
+                bat 'dir /s /b src/*.java > sources.txt'
                 // Compile Java code using javac
                 bat 'javac -d target @sources.txt'
             }
