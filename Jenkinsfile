@@ -1,40 +1,39 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from Git repository
-                git 'https://github.com/your-username/your-php-repo.git'
+                // Checkout code from GitHub repository
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/master']],
+                          userRemoteConfigs: [[url: 'https://github.com/RuturajSubhedar/2023MT93081_Devops_A1.git']]])
             }
         }
-        stage('Build') {
+        stage('Build and Compile') {
             steps {
-                // Example: Run Composer install for dependency management
-                sh 'composer install'
+                // Use Maven to build and compile the project
+                sh 'mvn clean compile'
             }
-        }
-        stage('Compile') {
-            steps {
-                // No compilation step required for PHP
-                // Placeholder for any other build steps
-                sh 'echo "Building PHP project..."'
+            
+            post {
+                success {
+                    // If build succeeds, archive the build artifacts
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+                }
+                
+                failure {
+                    // If build fails, send a notification or take other actions
+                    echo 'Build failed! Please check the build logs.'
+                }
             }
         }
     }
-
+    
     post {
-        success {
-            // Actions to perform if the pipeline succeeds
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            // Actions to perform if the pipeline fails
-            echo 'Pipeline failed!'
-        }
         always {
-            // Actions to perform regardless of pipeline result
-            echo 'Pipeline completed.'
+            // Clean up workspace after the build is complete
+            cleanWs()
         }
     }
 }
